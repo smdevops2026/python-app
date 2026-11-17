@@ -1,0 +1,17 @@
+steps:
+  # Step 1: Install pytest and run unit tests
+  - name: 'python:3.12-slim'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        pip install pytest
+        pytest -v
+
+  # Step 2: Build the Docker image (only runs if tests pass)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/python-test-app:$SHORT_SHA', '.']
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
